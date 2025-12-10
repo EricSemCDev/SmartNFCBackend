@@ -8,7 +8,11 @@ app.use(cors());
 app.use(express.json());
 
 // === Firebase Admin ===
-const serviceAccount = require("./serviceAccountKey.json");
+if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
+  throw new Error("FIREBASE_SERVICE_ACCOUNT não definido nas env vars!");
+}
+
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
